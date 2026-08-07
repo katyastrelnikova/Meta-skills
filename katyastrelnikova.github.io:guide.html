@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Какие мета-навыки нужны, чтобы меняться</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink:    #1C1C1C; --mid:   #5A5A5A; --light: #9A9A9A;
+    --rule:   #E2DDD8; --bg:    #FAFAF8; --paper: #FFFFFF;
+    --accent: #C4906E; --a2:    #8BAF9E;
+    --s1: #A8BDD0; --s2: #E8C49A; --s3: #A8CFC4;
+    --s4: #E8B09C; --s5: #B0BAE0; --s6: #C4B0E0;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans:  'Inter', system-ui, sans-serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  a { color: var(--accent); }
+
+  .hero { background: #F5F0E8; color: #2C2C2C; padding: 80px 40px 72px; position: relative; overflow: hidden; }
+  .hero::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #A8BDD0, #E8C49A, #A8CFC4, #E8B09C, #B0BAE0); }
+  .hero-inner { max-width: 760px; margin: 0 auto; }
+  .hero-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8BAF9E; margin-bottom: 16px; }
+  .hero-badge { display: inline-block; background: #8BAF9E; color: white; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 14px; border-radius: 4px; margin-bottom: 24px; }
+  .hero h1 { font-family: var(--serif); font-size: clamp(30px, 5vw, 50px); font-weight: 400; line-height: 1.2; margin-bottom: 20px; color: #2C2C2C; }
+  .hero h1 em { font-style: italic; color: #8BAF9E; }
+  .hero-sub { font-size: 17px; color: #5A5A5A; max-width: 580px; line-height: 1.65; }
+
+  .stats { background: var(--paper); border-bottom: 1px solid var(--rule); padding: 48px 40px; }
+  .stats-inner { max-width: 760px; margin: 0 auto; }
+  .stat-pair { display: grid; grid-template-columns: 1fr auto 1fr; gap: 24px; align-items: center; padding: 32px 0; }
+  .stat-divider { height: 1px; background: var(--rule); }
+  .stat-arrow { font-size: 20px; color: var(--rule); text-align: center; }
+  .stat-arrow--vs { font-size: 13px; font-weight: 600; color: var(--light); letter-spacing: 0.05em; }
+  .stat-num { font-family: var(--serif); font-size: 48px; font-weight: 600; color: var(--ink); line-height: 1; margin-bottom: 6px; }
+  .stat-label { font-size: 13px; color: var(--mid); line-height: 1.5; }
+  .stat-source { font-size: 11px; color: var(--light); margin-top: 4px; }
+
+  .content { max-width: 760px; margin: 0 auto; padding: 64px 40px; }
+  .section { margin-bottom: 72px; }
+  .section-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+  h2 { font-family: var(--serif); font-size: clamp(24px, 3vw, 34px); font-weight: 400; line-height: 1.3; margin-bottom: 24px; color: var(--ink); }
+  p { color: var(--mid); margin-bottom: 18px; font-size: 16px; }
+  p:last-child { margin-bottom: 0; }
+  .lead { font-size: 18px; color: var(--ink); line-height: 1.65; margin-bottom: 24px; }
+  .rule { height: 1px; background: var(--rule); margin: 48px 0; }
+
+  .pull { border-left: 3px solid var(--accent); padding: 20px 24px; background: #F5EFE8; border-radius: 0 6px 6px 0; margin: 32px 0; }
+  .pull p { font-family: var(--serif); font-style: italic; font-size: 17px; color: var(--ink); margin: 0; }
+
+  .circle-wrap { margin: 40px 0; background: var(--paper); border: 1px solid var(--rule); border-radius: 12px; padding: 32px; display: flex; flex-direction: column; align-items: center; }
+  .circle-title { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--light); margin-bottom: 24px; }
+
+  .stage-nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 48px; }
+  .stage-pill { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 100px; font-size: 13px; font-weight: 500; background: var(--paper); border: 1px solid var(--rule); color: var(--mid); text-decoration: none; transition: all 0.2s; }
+  .stage-pill:hover { border-color: currentColor; }
+  .stage-pill .dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  .key-map { background: #2C2C2C; border-radius: 10px; padding: 32px; margin: 40px 0; }
+  .key-map-title { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 20px; }
+  .key-map-row { display: flex; flex-direction: column; gap: 2px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+  .key-map-row:last-child { border-bottom: none; }
+  .key-stage { font-size: 13px; color: rgba(255,255,255,0.45); }
+  .key-arrow { color: rgba(255,255,255,0.2); }
+  .key-skill { font-weight: 600; font-size: 14px; color: white; }
+  .key-why { font-size: 13px; color: rgba(255,255,255,0.5); font-style: italic; display: block; margin-top: 2px; }
+
+  .stage-block { margin-bottom: 64px; scroll-margin-top: 32px; }
+  .stage-header { border-radius: 10px; padding: 28px 32px; margin-bottom: 32px; position: relative; overflow: hidden; }
+  .stage-header::before { content: attr(data-num); position: absolute; right: 24px; top: 50%; transform: translateY(-50%); font-family: var(--serif); font-size: 72px; font-weight: 600; opacity: 0.08; color: white; line-height: 1; }
+  .stage-num { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 8px; }
+  .stage-title { font-family: var(--serif); font-size: 26px; font-weight: 400; color: white; margin: 0; line-height: 1.3; }
+  .stage-tag { margin-top: 6px; font-style: italic; font-size: 15px; color: rgba(255,255,255,0.7); }
+  .stage-quote { display: inline-block; background: rgba(255,255,255,0.08); border-radius: 6px; padding: 10px 16px; margin-top: 16px; font-size: 14px; color: rgba(255,255,255,0.85); font-style: italic; }
+  .s1{background:var(--s1)} .s2{background:var(--s2)} .s3{background:var(--s3)}
+  .s4{background:var(--s4)} .s5{background:var(--s5)} .s6{background:var(--s6)}
+
+  .stage-task { background: var(--paper); border: 1px solid var(--rule); border-radius: 8px; padding: 20px 24px; margin: 24px 0 28px; }
+  .stage-task-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--light); margin-bottom: 8px; }
+  .stage-task p { margin: 0; font-size: 15px; color: var(--ink); }
+
+  .skills-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--light); margin: 28px 0 16px; }
+  .skill-item { padding: 16px 0; border-bottom: 1px solid var(--rule); }
+  .skill-item:last-child { border-bottom: none; }
+  .skill-name { font-weight: 600; font-size: 15px; color: var(--ink); margin-bottom: 4px; }
+  .skill-desc { font-size: 14px; color: var(--mid); margin: 0; line-height: 1.6; }
+  .skill-q { font-style: italic; color: var(--light); font-size: 13px; margin-top: 4px; margin-bottom: 0; }
+
+  .note { font-size: 14px; color: var(--light); font-style: italic; margin: 20px 0; }
+
+  /* Pattern chain */
+  .pattern-chain { display: flex; align-items: center; gap: 0; margin: 28px 0; flex-wrap: wrap; }
+  .chain-item { background: var(--paper); border: 1px solid var(--rule); border-radius: 8px; padding: 12px 16px; font-size: 14px; color: var(--ink); font-weight: 500; flex-shrink: 0; }
+  .chain-arrow { font-size: 18px; color: var(--light); padding: 0 8px; flex-shrink: 0; }
+  .chain-item.chain-start { border-color: #8BAF9E; color: #8BAF9E; }
+  .chain-item.chain-end { border-color: #C4906E; color: #C4906E; }
+
+  /* Stage inline quote */
+  .stage-inline-quote { background: var(--bg); border-radius: 8px; padding: 16px 20px; margin: 20px 0; border-left: 3px solid var(--rule); }
+  .stage-inline-quote p { font-style: italic; font-size: 15px; color: var(--mid); margin: 0; }
+
+  /* Three levels visual */
+  .levels-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 28px 0; }
+  .level-card { border-radius: 8px; padding: 20px; }
+  .level-card.l1 { background: #EEF2F6; border-top: 3px solid var(--s1); }
+  .level-card.l2 { background: #EAF6F2; border-top: 3px solid var(--s3); }
+  .level-card.l3 { background: #F0EEF8; border-top: 3px solid var(--s6); }
+  .level-card-num { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--light); margin-bottom: 6px; }
+  .level-card-title { font-weight: 600; font-size: 13px; color: var(--ink); margin-bottom: 8px; }
+  .level-card-skills { font-size: 12px; color: var(--mid); line-height: 1.6; }
+
+  /* Conclusion card */
+  .conclusion-card { background: #2C2C2C; border-radius: 10px; padding: 32px; margin: 32px 0; text-align: center; }
+  .conclusion-card p { font-family: var(--serif); font-size: 20px; color: white; margin: 0; line-height: 1.5; }
+  .conclusion-card em { color: var(--a2); font-style: normal; }
+  .conclusion-map-tag { display: inline-block; margin-top: 24px; background: var(--a2); color: white; font-size: 13px; font-weight: 600; padding: 12px 28px; border-radius: 100px; letter-spacing: 0.04em; }
+
+  .conclusion { background: var(--paper); border-top: 3px solid #2C2C2C; padding: 64px 40px; }
+  .conclusion-inner { max-width: 760px; margin: 0 auto; }
+
+  .footer { background: #2C2C2C; color: rgba(255,255,255,0.4); padding: 32px 40px; text-align: center; font-size: 13px; }
+  .footer a { color: var(--a2); text-decoration: none; }
+
+  @media (max-width: 600px) {
+    .hero, .stats, .content, .conclusion, .footer { padding-left: 20px; padding-right: 20px; }
+    .stat-pair { grid-template-columns: 1fr; gap: 12px; }
+    .stat-arrow { display: none; }
+    .stage-header { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Humanity Lab × Хэлс-коуч Катя Стрельникова</div>
+    <div class="hero-badge">Гайд</div>
+    <h1>Какие мета-навыки нужны, <em>чтобы меняться</em></h1>
+    <p class="hero-sub">Почему у нас, умных и мотивированных людей, не всегда получается изменить образ жизни и привычки? Даже если точно знаем, что делать и искренне хотим. В гайде рассказываем, как устроен процесс изменений. Из каких стадий он состоит. И какие мета-навыки необходимы на стадии, где мы сейчас, чтобы сдвинуться с места.</p>
+  </div>
+</header>
+
+<section class="stats">
+  <div class="stats-inner">
+    <div class="stat-pair">
+      <div class="stat-item">
+        <div class="stat-num"><a href="https://www.who.int/news-room/fact-sheets/detail/noncommunicable-diseases" style="text-decoration:none;color:inherit">74%</a></div>
+        <div class="stat-label">всех смертей в мире — хронические заболевания, связанные с образом жизни</div>
+        <div class="stat-source">ВОЗ, 2023</div>
+      </div>
+      <div class="stat-arrow">→</div>
+      <div class="stat-item">
+        <div class="stat-num" style="color:#C4906E"><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6378495/" style="text-decoration:none;color:inherit">80%</a></div>
+        <div class="stat-label">из них предотвратимы изменением поведения — сон, питание, движение, стресс</div>
+        <div class="stat-source">PMC / J Am Coll Cardiol</div>
+      </div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-pair">
+      <div class="stat-item">
+        <div class="stat-num">62%</div>
+        <div class="stat-label">Здоровье — главный фактор благополучия для 62% россиян</div>
+        <div class="stat-source"><a href="https://style.rbc.ru/invest/69dca1109a79479d14768dfb">РБК Wellbeing Review</a></div>
+      </div>
+      <div class="stat-arrow stat-arrow--vs">vs</div>
+      <div class="stat-item">
+        <div class="stat-num" style="color:#C4906E">12%</div>
+        <div class="stat-label">реально соблюдают ЗОЖ — при том что 88% россиян декларируют его соблюдение</div>
+        <div class="stat-source"><a href="https://wciom.ru/analytical-reviews/analiticheskii-obzor/zdorovyi-obraz-zhizni-monitoring">ВЦИОМ</a> / <a href="https://www.rbc.ru/society/08/11/2019/5dc41d349a7947456b9d9bca">Росстат</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<main class="content">
+
+  <!-- ПОЧЕМУ ТАК ПРОИСХОДИТ -->
+  <section class="section">
+    <div style="font-size:11px;color:#C8C3BC;margin-bottom:20px;letter-spacing:0.06em">Humanity Lab × Хэлс-коуч Катя Стрельникова</div>
+    <div class="section-eyebrow">Почему так происходит</div>
+    <p class="lead">Люди знают. Искренне хотят. И даже начинают — и нередко начинают хорошо. Но в итоге не делают.</p>
+    <p>Проблема не в наличии информации и не в старте. Проблема в том, что происходит в пятницу вечером после трудной недели, в ноябре когда темно уже в 16, в момент когда всё навалилось одновременно. Именно здесь рассыпается большинство попыток, не из-за слабости характера, а из-за того, что изменение образа жизни требует огромного количества ежедневных решений, каждое из которых нужно принимать заново (пока это еще не стало привычкой), без автоматизма, без опоры, часто в состоянии усталости и стресса.</p>
+    <p><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4988401/">Исследования</a> фиксируют один и тот же паттерн:</p>
+    <div class="pattern-chain">
+      <div class="chain-item chain-start">Хороший старт</div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-item">Угасание приверженности</div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-item chain-end">Возврат к исходному</div>
+    </div>
+    <p>Это универсальная закономерность, которая воспроизводится снова и снова — вне зависимости от уровня образования, мотивации и силы намерения.</p>
+    <div class="pull"><p>РБК в <a href="https://style.rbc.ru/invest/69dca1109a79479d14768dfb" style="color:#C4906E">своём исследовании 2026 года</a> формулирует это так: трудность не в том, что человек не знает, что делать, а в том, что ему сложно встроить это в жизнь.</p></div>
+    <p>Изменение поведения — процесс со своей внутренней логикой и своими стадиями. Он может занимать месяцы, иногда годы, а не 21 день. Он нелинеен — откаты и остановки являются его частью. И на каждой его стадии человеку нужно разное.</p>
+    <p>В этом процессе нельзя переоценить значение мета-навыков. Самосознание, эмоциональная регуляция, способность учиться из опыта, а не ломаться об него — не приятные дополнения к «здоровому образу жизни». А его фундамент.</p>
+    <p>В этом гайде мы посмотрим как устроены изменения, через какие стадии проходит человек, чтобы прийти к устойчивым привычкам, и какие мета-навыки нужны на каждой из них.</p>
+  </section>
+
+  <div class="rule"></div>
+
+  <!-- НАУКА О СТАДИЯХ -->
+  <section class="section">
+    <div style="font-size:11px;color:#C8C3BC;margin-bottom:20px;letter-spacing:0.06em">Humanity Lab × Хэлс-коуч Катя Стрельникова</div>
+    <div class="section-eyebrow">Наука о стадиях изменений</div>
+    <h2>Транстеоретическая модель</h2>
+    <p>В 1970-х годах американский психолог Джеймс Прохаска изучал людей, которые бросали курить. Его интересовало, что отличает тех, у кого получилось, от тех, кто раз за разом возвращался к привычке. Вывод оказался неожиданным. Дело было не в силе воли и не в уровне мотивации. Успешные и неуспешные отличались тем, на какой стадии готовности к изменению они находились — и применяли ли инструменты, соответствующие этой стадии.</p>
+    <p>Так появилась транстеоретическая модель изменений (ТТМ) — одна из самых воспроизводимых моделей в поведенческой психологии. С тех пор она вышла далеко за пределы темы курения и сегодня применяется в работе с питанием, движением, сном, управлением стрессом и десятками других областей.</p>
+    <p>Главная идея модели простая и при этом контринтуитивная: изменение — не разовое действие, фиксируемое по факту исполнения. А процесс, который проходит через несколько предсказуемых стадий. <span style="color:#C4906E">Обратите внимание, что «Действие» — четвертая стадия. 😳</span></p>
+
+    <div style="margin:32px 0;background:var(--paper);border:1px solid var(--rule);border-radius:12px;padding:28px 20px">
+      <p style="font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--light);text-align:center;margin-bottom:20px">Стадии изменений по ТТМ</p>
+      <svg width="100%" viewBox="0 0 680 210" role="img">
+        <title>Пять стадий изменений по транстеоретической модели</title>
+        <desc>Стадии слева направо: Предразмышление, Размышление, Подготовка, Действие, Поддержание. Откат — дуги сверху назад.</desc>
+        <defs>
+          <marker id="m1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+          <marker id="m2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#C4B0E0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+        </defs>
+        <!-- Горизонтальная линия пути -->
+        <line x1="20" y1="130" x2="660" y2="130" stroke="#E2DDD8" stroke-width="1.5"/>
+        <!-- Стрелки между стадиями (под овалами) -->
+        <line x1="114" y1="148" x2="132" y2="152" stroke="#C8C3BC" stroke-width="1.2" marker-end="url(#m1)"/>
+        <line x1="240" y1="148" x2="258" y2="152" stroke="#C8C3BC" stroke-width="1.2" marker-end="url(#m1)"/>
+        <line x1="366" y1="148" x2="384" y2="152" stroke="#C8C3BC" stroke-width="1.2" marker-end="url(#m1)"/>
+        <line x1="492" y1="148" x2="510" y2="152" stroke="#C8C3BC" stroke-width="1.2" marker-end="url(#m1)"/>
+        <!-- Откаты — дуги сверху -->
+        <path d="M607 104 Q607 50 490 50 Q400 50 375 104" fill="none" stroke="#C4B0E0" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#m2)"/>
+        <path d="M481 104 Q481 30 365 30 Q260 30 240 104" fill="none" stroke="#C4B0E0" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.65" marker-end="url(#m2)"/>
+        <path d="M355 104 Q355 14 240 14 Q150 14 114 104" fill="none" stroke="#C4B0E0" stroke-width="1" stroke-dasharray="4 4" opacity="0.45" marker-end="url(#m2)"/>
+        <!-- Метка откат -->
+        <text x="340" y="11" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="500" fill="#C4B0E0">← откат в любой момент</text>
+        <!-- СТАДИЯ 1 -->
+        <ellipse cx="66" cy="130" rx="60" ry="26" fill="#A8BDD0"/>
+        <text x="66" y="127" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="white">Предразмыш-</text>
+        <text x="66" y="139" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="white">ление</text>
+        <text x="66" y="175" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#9A9A9A">«Всё ок»</text>
+        <!-- СТАДИЯ 2 -->
+        <ellipse cx="192" cy="130" rx="60" ry="26" fill="#E8C49A"/>
+        <text x="192" y="134" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="white">Размышление</text>
+        <text x="192" y="175" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#9A9A9A">«Надо бы…»</text>
+        <!-- СТАДИЯ 3 -->
+        <ellipse cx="318" cy="130" rx="60" ry="26" fill="#A8CFC4"/>
+        <text x="318" y="134" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="white">Подготовка</text>
+        <text x="318" y="175" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#9A9A9A">«Готовлюсь»</text>
+        <!-- СТАДИЯ 4 -->
+        <ellipse cx="444" cy="130" rx="60" ry="26" fill="#E8B09C"/>
+        <text x="444" y="134" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="white">Действие</text>
+        <text x="444" y="175" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#9A9A9A">«Я делаю»</text>
+        <!-- СТАДИЯ 5 -->
+        <ellipse cx="576" cy="130" rx="72" ry="26" fill="#B0BAE0"/>
+        <text x="576" y="134" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="white">Поддержание</text>
+        <text x="576" y="175" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#9A9A9A">«Часть меня»</text>
+      </svg>
+    </div>
+    <div class="skill-item" style="border:none;padding:12px 0">
+      <div class="skill-name" style="color:var(--s1)">Precontemplation / Предразмышление</div>
+      <p class="skill-desc">Человек не думает об изменениях или отрицает проблему.</p>
+      <p class="skill-q">«Я не спортивный человек, это не моё».</p>
+    </div>
+    <div class="skill-item" style="padding:12px 0">
+      <div class="skill-name" style="color:var(--s2)">Contemplation / Размышление</div>
+      <p class="skill-desc">Понимает, что что-то всё-таки не так, допускает, что стоит совершить какие-то изменения, но ещё не готов действовать.</p>
+      <p class="skill-q">«Да, наверное, я слишком мало двигаюсь. Спина болит, энергии нет... Но куда я пойду с моим графиком?»</p>
+    </div>
+    <div class="skill-item" style="padding:12px 0">
+      <div class="skill-name" style="color:var(--s3)">Preparation / Подготовка</div>
+      <p class="skill-desc">Принял решение, собирает информацию, планирует первые шаги.</p>
+      <p class="skill-q">«Записалась на пробное занятие пилатесом. Купила коврик. Смотрю, что есть рядом с домом».</p>
+    </div>
+    <div class="skill-item" style="padding:12px 0">
+      <div class="skill-name" style="color:var(--s4)">Action / Действие</div>
+      <p class="skill-desc">Активно меняет поведение.</p>
+      <p class="skill-q">«Хожу на пилатес раз в неделю уже полтора месяца. Пропустила однажды, но вернулась».</p>
+    </div>
+    <div class="skill-item" style="padding:12px 0;border-bottom:none">
+      <div class="skill-name" style="color:var(--s5)">Maintenance / Поддержание</div>
+      <p class="skill-desc">Удерживает изменение на протяжении 6+ месяцев, встраивает его в жизнь.</p>
+      <p class="skill-q">«Обожаю пилатес и хожу два раза в неделю. Чувствую себя сильно хуже, если пропускаю».</p>
+    </div>
+
+    <div class="skill-item" style="padding:12px 0">
+      <div class="skill-name" style="color:var(--s6)">Relapse / Откат</div>
+      <p class="skill-desc">Нормальная и предсказуемая часть процесса — не конец пути.</p>
+      <p class="skill-q">«Бросила тренировки. Но это не провал — это данные».</p>
+    </div>
+
+    <div class="pull" style="margin-top:24px">
+      <p>Если подключить мета-навыки, каждый круг становится не возвратом к нулю, а новым слоем понимания себя. Человек после отката знает о себе и своих паттернах больше, чем до него.</p>
+    </div>
+
+
+
+    <p>В общем, каждая стадия требует разного подхода. Мета-навыки, о которых мы будем говорить дальше, во многом универсальны, но то, как они работают и что именно выходит на первый план, меняется в зависимости от того, на какой стадии мы находимся.</p>
+
+    <div class="stage-nav" style="margin-top:32px">
+      <a href="#s1" class="stage-pill"><span class="dot" style="background:var(--s1)"></span>Предразмышление</a>
+      <a href="#s2" class="stage-pill"><span class="dot" style="background:var(--s2)"></span>Размышление</a>
+      <a href="#s3" class="stage-pill"><span class="dot" style="background:var(--s3)"></span>Подготовка</a>
+      <a href="#s4" class="stage-pill"><span class="dot" style="background:var(--s4)"></span>Действие</a>
+      <a href="#s5" class="stage-pill"><span class="dot" style="background:var(--s5)"></span>Поддержание</a>
+      <a href="#s6" class="stage-pill"><span class="dot" style="background:var(--s6)"></span>Откат</a>
+    </div>
+  </section>
+
+  <div class="rule"></div>
+
+  <!-- ЧТО ТАКОЕ МЕТА-НАВЫКИ -->
+  <section class="section">
+    <div class="section-eyebrow">Что такое мета-навыки и какие они бывают</div>
+    <p style="font-size:18px;color:var(--ink);line-height:1.6">Мета-навык — навык высшего порядка, который позволяет лучше осваивать другие навыки и улучшать уже имеющиеся. Если навык — это умение делать что-то конкретное, то мета-навык — это способность учиться, адаптироваться и меняться в принципе.</p>
+    <p>Термин в широкий оборот ввёл в 2012 году дизайнер и бизнес-стратег Марти Ноймайер в книге «Metaskills: Five Talents for the Robotic Age». Его тезис был простым и радикальным одновременно: наши проблемы не слишком сложные — просто наши навыки слишком базовые.</p>
+    <div style="background:var(--bg);border:1px solid var(--rule);border-radius:8px;padding:16px 20px;margin:20px 0;display:flex;align-items:center;gap:16px">
+      <div style="font-size:22px">📖</div>
+      <div>
+        <div style="font-size:12px;color:var(--light);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px">Читать также</div>
+        <a href="https://t.me/Stayhungryteam/2927" style="font-weight:600;font-size:15px;color:var(--ink)">«Мета-навыки: от теории к трансформации»</a>
+        <p style="margin:4px 0 0;font-size:13px;color:var(--mid)">Подробно о том, что такое мета-навыки, из чего они состоят и почему они определяют потолок любого роста. Гайд, который вы сейчас читаете — его продолжение.</p>
+      </div>
+    </div>
+    <p>Мета-навыки не устаревают. Они не привязаны к конкретной профессии, контексту или эпохе. И именно поэтому они так важны сейчас — в мире, где всё остальное меняется быстрее, чем успевает закрепиться.</p>
+    <p>А в теме изменения образа жизни мета-навыки работают особенно наглядно. Тело даёт мгновенную обратную связь. Паттерны видны невооружённым глазом. И именно через попытки изменить образ жизни многие из нас впервые по-настоящему сталкиваются с собой.</p>
+    <p>Аня <a href="https://t.me/Stayhungryteam/2927">описывает</a> три уровня мета-навыков — от фундаментального к трансформационному. В контексте изменений образа жизни задействованы все три, и все мета-навыки работают на всех стадиях — но с разным акцентом.</p>
+    <p>На каждой стадии есть один навык, без которого невозможно двигаться дальше. Не потому что остальные не нужны — а потому что именно этот становится критическим.</p>
+
+    <div class="key-map">
+      <div class="key-map-title">Основной навык каждой стадии</div>
+      <div class="key-map-row"><div style="display:flex;align-items:center;gap:8px"><span class="key-stage">Предразмышление</span><span class="key-arrow">→</span><span class="key-skill">Самосознание</span></div><span class="key-why">Без него невозможно увидеть, что изменение вообще нужно. Всё остальное — потом.</span></div>
+      <div class="key-map-row"><div style="display:flex;align-items:center;gap:8px"><span class="key-stage">Размышление</span><span class="key-arrow">→</span><span class="key-skill">Эмоциональная регуляция</span></div><span class="key-why">Амбивалентность держится на страхе. Без регуляции так и остаёмся в «надо бы» — месяцами и годами.</span></div>
+      <div class="key-map-row"><div style="display:flex;align-items:center;gap:8px"><span class="key-stage">Подготовка</span><span class="key-arrow">→</span><span class="key-skill">Обучаемость</span></div><span class="key-why">Без неё подготовка превращается в бесконечный поиск идеального плана. Обучаемость позволяет начать пробовать и корректировать на ходу.</span></div>
+      <div class="key-map-row"><div style="display:flex;align-items:center;gap:8px"><span class="key-stage">Действие</span><span class="key-arrow">→</span><span class="key-skill">Адаптивность</span></div><span class="key-why">Жизнь вмешивается всегда. Без адаптивности первый же сбой становится последним.</span></div>
+      <div class="key-map-row"><div style="display:flex;align-items:center;gap:8px"><span class="key-stage">Поддержание</span><span class="key-arrow">→</span><span class="key-skill">Создание смысла</span></div><span class="key-why">Дисциплина заканчивается. Мотивация уходит. Остаётся только смысл — и именно он держит поведение на годы вперёд.</span></div>
+      <div class="key-map-row"><div style="display:flex;align-items:center;gap:8px"><span class="key-stage">Откат</span><span class="key-arrow">→</span><span class="key-skill">Антихрупкость</span></div><span class="key-why">Без неё каждый откат разрушительнее предыдущего. С ней — каждый круг делает тебя устойчивее.</span></div>
+    </div>
+  </section>
+
+  <div class="rule"></div>
+
+  <!-- СТАДИЯ 1 -->
+  <div class="stage-block" id="s1">
+    <div class="stage-header s1" data-num="01">
+      <div style="font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:8px;letter-spacing:0.06em">Humanity Lab × Хэлс-коуч Катя Стрельникова</div>
+      <div class="stage-num">Стадия 01</div>
+      <h2 class="stage-title">Предразмышление</h2>
+      <div class="stage-tag">«У меня всё ок»</div>
+      <div class="stage-quote">«Дед курил и дожил до 100 лет»</div>
+    </div>
+    <p>На этой стадии мы не думаем об изменениях: «Дед курил и дожил до 100 лет». А может даже активно отрицаем, что они нужны: «Да у меня вся семья диабетики, какой смысл что-то делать». Даже если это не звучит как прямое отрицание: «У меня всё под контролем», «я просто устала в последнее время», «вот закончится этот период — и займусь собой».</p>
+    <p>Здесь к изменению нас чаще всего приводит что-то извне: анализы или диагнозы, рекомендации врача, вторая половина, фотография, на которой не узнаем себя и т.п.</p>
+    <div class="stage-inline-quote"><p>Дед курил и дожил до 100 лет» · «Да у меня вся семья диабетики, какой смысл что-то делать» · «Вот закончится этот период — и займусь собой</p></div>
+    <p>Важно: на этой стадии не нужны планы, программы и марафоны. Они не сработают. Потому что внутренней готовности и своего «зачем» ещё нет. Любое давление здесь даёт обратный эффект.</p>
+    <div class="stage-task">
+      <div class="stage-task-label">Главная задача по ТТМ — Consciousness Raising</div>
+      <p>Повышение осознанности. Не действие, а понимание. Мы должны посмотреть на ситуацию, честно и без давления, и начать отвечать себе на вопрос: а нужно ли мне это изменение? И если да — зачем?</p>
+    </div>
+    <div class="skills-label">Какие мета-навыки нужны</div>
+    <div class="skill-item">
+      <div class="skill-name">Самосознание ★</div>
+      <p class="skill-desc">Главный навык этой стадии — честно и без оценки увидеть.</p>
+      <p class="skill-q">Что происходит с моим телом? С энергией? Со сном? Я замечаю это — или избегаю замечать?</p>
+    </div>
+    <div class="skill-item">
+      <div class="skill-name">Метакогниция</div>
+      <p class="skill-desc">Способность увидеть собственные защитные механизмы. На этой стадии часто очень убедительно объясняем себе, почему всё нормально.</p>
+      <p class="skill-q">Я рационализирую или честно оцениваю?</p>
+    </div>
+    <div class="skill-item">
+      <div class="skill-name">Когнитивная гибкость</div>
+      <p class="skill-desc">Способность допустить другой взгляд на ситуацию. Именно она позволяет сдвинуться с «всё нормально» на «а может, стоит посмотреть честнее». Без неё самосознание не запускается — просто не можем увидеть ситуацию иначе, чем привыкли.</p>
+    </div>
+  </div>
+
+  <!-- СТАДИЯ 2 -->
+  <div class="stage-block" id="s2">
+    <div class="stage-header s2" data-num="02">
+      <div style="font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:8px;letter-spacing:0.06em">Humanity Lab × Хэлс-коуч Катя Стрельникова</div>
+      <div class="stage-num">Стадия 02</div>
+      <h2 class="stage-title">Размышление</h2>
+      <div class="stage-tag">«Надо бы, но…»</div>
+      <div class="stage-quote">«Спина болит, энергии нет... Но куда я пойду с моим графиком?»</div>
+    </div>
+    <p>На этой стадии мы уже увидели, что что-то не так. И не можем развидеть. Более того, допускаем, что изменения возможны. И даже, может быть, искренне хотим их. Но ещё не готовы действовать. Живём в амбивалентности: «хочу изменить» и «не готова» одновременно. Эта стадия может длиться долго — месяцами и даже годами.</p>
+    <p>«Да, наверное, я слишком мало двигаюсь. Спина болит, энергии нет... Но куда я пойду с моим графиком?»</p>
+    <p>Важно: эта стадия тоже ещё не про конкретные планы и программы. Нужно дать себе время и пространство честно взвесить. Любое давление, внешнее или внутреннее, здесь тоже даст обратный эффект. Нужно искренне захотеть, почувствовать, как выбор меняться перевешивает.</p>
+    <div class="stage-task">
+      <div class="stage-task-label">Главная задача по ТТМ — Decisional Balance</div>
+      <p>Исследовать амбивалентность, а не бороться с ней. Один из самых главных вопросов здесь: что будет, если я ничего не изменю? Мы взвешиваем: плюсы изменения против минусов, комфорт привычного против дискомфорта нового. Наша цель — прийти к внутренней уверенности, что я хочу и могу меняться.</p>
+    </div>
+    <p class="note">Большинство инструментов из книг про привычки здесь тоже не работают (если вы прочитали «Атомные привычки», а воз и ныне там, возможно, вы именно здесь). Решение ещё не принято до конца. Но кое-что из Клира уже работает. В «Атомных привычках» он пишет, что устойчивые изменения начинаются не с действий, а с идентичности — с вопроса «кем я хочу быть?». Именно на этой стадии этот вопрос особенно важен — он помогает перейти от «надо бы» к «я хочу».</p>
+    <div class="skills-label">Какие мета-навыки нужны</div>
+    <div class="skill-item">
+      <div class="skill-name">Эмоциональная регуляция ★</div>
+      <p class="skill-desc">Выдерживать тревогу перед изменением. Амбивалентность часто держится не на логике, а на страхе. Страхе не справиться, потерять что-то привычное, снова попробовать и не получить результат. Регуляция — способность находиться с этим страхом и другими дискомфортными эмоциями, не убегая обратно в «потом».</p>
+    </div>
+    <div class="skill-item">
+      <div class="skill-name">Смена перспективы</div>
+      <p class="skill-desc">Посмотреть на ситуацию из другой точки. Не «что мне мешает сейчас», а «что будет через год, если я ничего не изменю». Или: «что бы я сказала подруге, которая описывает мне свою ситуацию так же, как я описываю свою».</p>
+    </div>
+    <div class="skill-item">
+      <div class="skill-name">Создание смысла</div>
+      <p class="skill-desc">На этой стадии он только начинает формироваться. Возможно, это ещё не чёткий ответ, а первый контакт с вопросом «зачем мне это на самом деле». Не «надо быть здоровой», а что-то более личное и глубокое. Именно этот смысл потом будет держать нас на стадиях действия и поддержания.</p>
+    </div>
+    <div class="skill-item">
+      <div class="skill-name">Самосознание</div>
+      <p class="skill-desc">Теперь не просто «увидеть, что паттерн есть», а «понять, что именно не так и почему».</p>
+    </div>
+    <div class="skill-item">
+      <div class="skill-name">Метакогниция</div>
+      <p class="skill-desc">Увидеть амбивалентность изнутри.</p>
+      <p class="skill-q">Я ищу причины не начинать — или честно оцениваю ситуацию?</p>
+    </div>
+    <div class="skill-item">
+      <div class="skill-name">Когнитивная гибкость</div>
+      <p class="skill-desc">Увидеть, что привычные объяснения — не факт, а интерпретация.</p>
+      <p class="skill-q">«У меня нет времени» — это правда или удобная история?</p>
+    </div>
+  </div>
+
+  <!-- СТАДИЯ 3 -->
+  <div class="stage-block" id="s3">
+    <div class="stage-header s3" data-num="03">
+      <div style="font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:8px;letter-spacing:0.06em">Humanity Lab × Хэлс-коуч Катя Стрельникова</div>
+      <div class="stage-num">Стадия 03</div>
+      <h2 class="stage-title">Подготовка</h2>
+      <div class="stage-tag">«Я готовлюсь»</div>
+      <div class="stage-quote">«Записалась на пробное занятие пилатесом. Купила коврик»</div>
+    </div>
+    <p>На этой стадии мы уже приняли решение меняться и поверили, что это возможно. Начинаем собирать информацию, искать подходящий формат, планировать первые шаги.</p>
+    <p>«Записалась на пробное занятие пилатесом», «купила коврик», «смотрю, что есть рядом с домом», «пробую тренера, который понравился».</p>
+    <p>Это важная и часто недооценённая стадия. Именно здесь закладывается качество будущего действия. Если пропустить её, перепрыгнуть сразу к активным действиям без достаточной подготовки, план окажется нереалистичным, и первое же препятствие его сломает. Именно из-за отсутствия этой стадии часто рушатся великие начинания, которые нам закладывают марафоны, челленджи, аскезы и иже с ними.</p>
+    <p>Но у этой стадии есть и своя ловушка: бесконечная подготовка. Ещё один подкаст, ещё одна книга, ещё один план — и действие всё время откладывается. Иногда подготовка может стать способом никогда не начинать.</p>
+    <p>А ещё внутри этой стадии часто живут два состояния одновременно: воодушевление — «наконец-то начну» — и фоновая тревога — «а вдруг снова не получится». Это нормально. Именно здесь важно не ждать, пока тревога исчезнет, а научиться действовать вместе с ней.</p>
+    <div class="stage-task">
+      <div class="stage-task-label">Главная задача по ТТМ</div>
+      <p>Найти конкретный, реалистичный первый шаг и сделать его. Начать пробовать. Научиться накидывать не идеальный, а рабочий план. Экспериментировать, делать безоценочные выводы и маленькие шаги.</p>
+    </div>
+    <p class="note">Вот здесь наконец начинают работать инструменты из книг про привычки. «Нанопривычки» Би Джея Фогга, «Атомные привычки» Джеймса Клира, «Tiny Experiments» Энн-Лор Ле Кунф. Но даже самый хороший инструмент не сработает без мета-навыков. Якорение привычек (habit stacking) требует самосознания. Продумывание и тестирование крошечных шагов требуют рефлексии. Эксперименты требуют когнитивной гибкости — смотреть на данные о себе без осуждения.</p>
+    <div class="skills-label">Какие мета-навыки нужны</div>
+    <div class="skill-item">
+      <div class="skill-name">Обучаемость ★</div>
+      <p class="skill-desc">Готовность искать то, что работает именно для меня, а не копировать чужой опыт. Экспериментировать, замечать результат, корректировать. Не «как правильно», а «как у меня».</p>
+    </div>
+    <div class="skill-item">
+      <div class="skill-name">Управление вниманием</div>
+      <p class="skill-desc">Не тонуть в потоке информации о здоровье. Выбрать одно направление и идти в него, не оглядываясь на каждый новый тренд и чужой опыт.</p>
+    </div>
+    <div class="skill-item">
+      <div class="skill-name">Системное мышление</div>
+      <p class="skill-desc">Не хвататься за всё сразу. Видеть, что связано с чем, и выбрать одну точку входа, которая потянет за собой остальное. Не «начну правильно питаться, заниматься спортом и медитировать с понедельника», а одно — но то, что именно мне позволит начать.</p>
+    </div>
+    <div class="skill-item">
+      <div class="skill-name">Рефлексия</div>
+      <p class="skill-desc">Делать безоценочные выводы из первых попыток. Что сработало? Что нет? Почему? Здесь рефлексия — практический инструмент, а не абстракция.</p>
+    </div>
+    <div class="skill-item">
+      <div class="skill-name">Самосознание</div>
+      <p class="skill-desc">Теперь не просто «увидеть паттерн», а «понять, что именно мне подходит и почему предыдущие попытки не сработали».</p>
+    </div>
+    <div class="skill-item">
+      <div class="skill-name">Эмоциональная регуляция</div>
+      <p class="skill-desc">Удерживать баланс между воодушевлением и тревогой, не давая первому превратиться в перегрузку, а второй — в паралич.</p>
+    </div>
+  </div>
+
+  <!-- СТАДИЯ 4 -->
+  <div class="stage-block" id="s4">
+    <div class="stage-header s4" data-num="04">
+      <div style="font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:8px;letter-spacing:0.06em">Humanity Lab × Хэлс-коуч Катя Стрельникова</div>
+      <div class="stage-num">Стадия 04</div>
+      <h2 class="stage-title">Действие</h2>
+      <div class="stage-tag">«Я делаю»</div>
+      <div class="stage-quote">«Хожу на пилатес раз в неделю уже полтора месяца. Пропустила однажды, но вернулась»</div>
+    </div>
+    <p>На этой стадии мы активно меняем поведение. Это самая видимая стадия — и одновременно самая уязвимая. Именно здесь происходит большинство откатов (хотя, будем честны, происходят они на любой стадии, но здесь у нас уже закрадывается надежда, что это навсегда, но нет).</p>
+    <p>«Хожу на пилатес раз в неделю уже полтора месяца. Пропустила однажды, но вернулась».</p>
+    <p>Энтузиазм и новизна постепенно сходят на нет — это нормально и предсказуемо. Жизнь вмешивается: командировка, болезнь, трудная неделя. Ожидания не совпадают с реальностью — результата не видно, он не такой быстрый, как хотелось или и вовсе другой. И именно здесь большинство из нас начинает думать: «наверное, это не моё», «наверное, я делаю что-то не так», «наверное, мне нужен другой метод».</p>
+    <div class="stage-task">
+      <div class="stage-task-label">Главная задача по ТТМ</div>
+      <p>Не идеальное выполнение, а возвращение к своему коммитменту. Не «ни разу не пропустить», а «заметить, что пропустила — и вернуться». Разница между этими двумя установками определяет, дойдём ли мы до следующей стадии, станет ли это поведение привычным.</p>
+    </div>
+    <p class="note">Здесь инструменты из книг про привычки работают уже в полную силу. И не как эксперимент, а как система. Мы уже знаем, что нам подходит. Задача — удерживать и возвращаться. Но и здесь без мета-навыков инструменты дадут сбой. Трекинг без рефлексии превратится в самонаказание. Система без адаптивности рассыпается при первом изменении в жизни.</p>
+    <div class="skills-label">Какие мета-навыки нужны</div>
+    <div class="skill-item">
+      <div class="skill-name">Адаптивность ★</div>
+      <p class="skill-desc">На этой стадии важнее всего уметь менять план, не бросая цель. Заболела, переехала, сменился график — жизнь постоянно вмешивается. Адаптивность позволяет не начинать каждый раз с нуля, а подстраивать поведение под новые условия.</p>
+    </div>
+    <div class="skill-item">
+      <div class="skill-name">Эмоциональная регуляция</div>
+      <p class="skill-desc">Теперь про умение выживерживать усталость, скуку и разочарование от медленного прогресса. Способность оставаться в процессе, даже когда он перестал быть новым и интересным.</p>
+    </div>
+    <div class="skill-item">
+      <div class="skill-name">Когнитивная гибкость</div>
+      <p class="skill-desc">Не интерпретировать пропуск как провал. «Я пропустила тренировку» — факт. «Я снова всё испортила» — интерпретация. Разница между ними часто определяет, вернёмся ли мы.</p>
+    </div>
+    <div class="skill-item">
+      <div class="skill-name">Обучаемость</div>
+      <p class="skill-desc">Уже не поиск подходящего формата, а корректировка на ходу. Что именно не работает в этот раз, а что стоит изменить.</p>
+    </div>
+    <div class="skill-item">
+      <div class="skill-name">Рефлексия</div>
+      <p class="skill-desc">Не про первые эксперименты, а про реальные паттерны. Что меня сбивает? Что помогает держаться? В какие моменты я срываюсь?</p>
+    </div>
+  </div>
+
+  <!-- СТАДИЯ 5 -->
+  <div class="stage-block" id="s5">
+    <div class="stage-header s5" data-num="05">
+      <div style="font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:8px;letter-spacing:0.06em">Humanity Lab × Хэлс-коуч Катя Стрельникова</div>
+      <div class="stage-num">Стадия 05</div>
+      <h2 class="stage-title">Поддержание</h2>
+      <div class="stage-tag">«Теперь это часть меня»</div>
+      <div class="stage-quote">«Обожаю пилатес и хожу два раза в неделю. Чувствую себя сильно хуже, если пропускаю»</div>
+    </div>
+    <p>Считается, что на эту стадию мы переходим после примерно 6 месяцев стабильного действия (да, даже если там были откаты).</p>
+    <p>«Обожаю пилатес и хожу два раза в неделю. Чувствую себя сильно хуже, если пропускаю».</p>
+    <p>Внешне всё выглядит как успех. Но внутри этой стадии есть своя сложность: поддержание требует меньше усилий, чем действие, но больше осознанности. Привычка уже есть, но она ещё не настолько автоматична, чтобы держаться без внимания. Именно здесь люди часто расслабляются раньше времени. И откат приходит откуда не ждали.</p>
+    <div class="stage-task">
+      <div class="stage-task-label">Главная задача по ТТМ</div>
+      <p>Не просто удерживать поведение, а интегрировать его в идентичность. Перейти от «я занимаюсь пилатесом» к «я активный человек».</p>
+    </div>
+    <div class="skills-label">Какие мета-навыки нужны</div>
+    <div class="skill-item">
+      <div class="skill-name">Создание смысла ★</div>
+      <p class="skill-desc">Здесь он перестаёт быть поиском и становится опорой. Не «зачем мне меняться», а «это часть того, кем я являюсь и как хочу жить». Именно смысл удерживает поведение в моменты, когда мотивация уходит — а она уходит у всех.</p>
+    </div>
+    <div class="skill-item">
+      <div class="skill-name">Антихрупкость</div>
+      <p class="skill-desc">Использовать трудности как материал, а не как угрозу. На стадии поддержания жизнь всё равно вмешивается — болезнь, стресс, переезд. Антихрупкость — когда трудный период не разрушает привычку, а укрепляет понимание себя.</p>
+    </div>
+    <div class="skill-item">
+      <div class="skill-name">Интеграция жизненного опыта</div>
+      <p class="skill-desc">Способность соединить всё, что узнала о себе в процессе. Каждый откат, каждая корректировка, каждое возвращение — это не потерянное время, а данные, которые теперь работают на тебя. На этой стадии мы впервые можем посмотреть назад и увидеть не историю провалов, а историю роста.</p>
+    </div>
+    <div class="skill-item">
+      <div class="skill-name">Присутствие в условиях неопределённости</div>
+      <p class="skill-desc">Оставаться в процессе, не зная, как долго это продлится и что будет дальше. Поддержание — не финальная точка, а процесс. Изменение не заканчивается, а становится жизнью.</p>
+    </div>
+    <div class="skill-item">
+      <div class="skill-name">Самосознание</div>
+      <p class="skill-desc">Теперь не про поиск паттернов, а про их интеграцию. Я знаю, что меня сбивает. Знаю, как возвращаться. Это уже не открытие — это опыт.</p>
+    </div>
+    <div class="skill-item">
+      <div class="skill-name">Рефлексия</div>
+      <p class="skill-desc">Не про отдельные попытки, а про весь путь. Что изменилось? Кем я стала за это время?</p>
+    </div>
+    <div class="skill-item">
+      <div class="skill-name">Адаптивность</div>
+      <p class="skill-desc">Привычка уже встроена, но жизнь продолжает меняться. Адаптивность позволяет удерживать суть, даже если форма меняется.</p>
+    </div>
+  </div>
+
+  <!-- ОТКАТ -->
+  <div class="stage-block" id="s6">
+    <div class="stage-header s6" data-num="→">
+      <div style="font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:8px;letter-spacing:0.06em">Humanity Lab × Хэлс-коуч Катя Стрельникова</div>
+      <div class="stage-num">Отдельный блок</div>
+      <h2 class="stage-title">Откат — неотъемлемая часть любой стадии</h2>
+      <div class="stage-quote">«Бросили тренировки. Вернулись к привычному питанию. Перестали ложиться вовремя»</div>
+    </div>
+    <p>Откат — (временный) возврат к старому поведению после периода изменений. Бросили тренировки после месяца регулярных занятий. Вернулись к привычному питанию на стрессовой неделе. Перестали ложиться вовремя из-за командировки.</p>
+    <p>В мире жёстких целей и марафонов, где все изменения происходят раз и навсегда, откат воспринимается как провал. Но именно это делает его таким разрушительным. Мы не просто возвращаемся к старому поведению. Мы возвращаемся с грузом стыда, разочарования и убеждения «у меня никогда не получится». И именно этот груз, а не сам откат, мешает вернуться.</p>
+    <p>В ТТМ откат описан иначе. Это не конец пути и не возврат к нулю. Это нормальная и предсказуемая часть процесса изменений, которая точно с нами случится. Большинство людей возвращаются на предыдущие стадии несколько раз (иногда десятки раз), прежде чем изменение становится по-настоящему устойчивым.</p>
+    <div class="pull">
+      <p>Важно понимать: после отката мы не возвращаемся туда, откуда начинали. Мы всё равно уже на шаг впереди, с новым опытом, который можно интегрировать. С пониманием того, что именно нас сбило. С новым слоем знания о себе — если, конечно, мы готовы на него посмотреть, а не заниматься самобичеванием.</p>
+    </div>
+    <div class="skills-label">Какие мета-навыки нужны</div>
+    <div class="skill-item">
+      <div class="skill-name">Антихрупкость ★</div>
+      <p class="skill-desc">Не просто «пережить откат». А стать устойчивее благодаря ему. Человек, который прошёл через откат и вернулся, знает о себе больше, чем тот, кто ни разу не срывался. Он знает, что именно его сбивает. Знает, как возвращаться. И следующий трудный период уже не такой страшный, потому что есть опыт, что ты справляешься.</p>
+    </div>
+    <div class="skill-item">
+      <div class="skill-name">Самосознание</div>
+      <p class="skill-desc">Увидеть откат честно, без самобичевания и без обесценивания. Не «я слабая» и не «ничего страшного». А «вот что случилось — и вот что я теперь знаю».</p>
+    </div>
+    <div class="skill-item">
+      <div class="skill-name">Эмоциональная регуляция</div>
+      <p class="skill-desc">Выдержать стыд и разочарование, не убегая ни в одну крайность (самонаказание или игнорирование).</p>
+    </div>
+    <div class="skill-item">
+      <div class="skill-name">Рефлексия</div>
+      <p class="skill-desc">Навык задавать себе правильные вопросы. Не «почему я такая», а «что именно произошло», «в какой момент всё пошло не так», «что я могу сделать иначе в следующий раз».</p>
+    </div>
+    <div class="skill-item">
+      <div class="skill-name">Обучаемость</div>
+      <p class="skill-desc">Воспринять откат как эксперимент, который дал результат. Пусть не тот, который хотелось. Но результат — всегда просто информация.</p>
+    </div>
+  </div>
+
+</main>
+
+<section class="conclusion">
+  <div class="conclusion-inner">
+    <div style="font-size:11px;color:#C8C3BC;margin-bottom:24px;letter-spacing:0.06em">Humanity Lab × Хэлс-коуч Катя Стрельникова</div>
+    <div style="font-size:11px;color:#C8C3BC;margin-bottom:20px;letter-spacing:0.06em">Humanity Lab × Хэлс-коуч Катя Стрельникова</div>
+    <div class="section-eyebrow">Вместо заключения</div>
+    <h2>Теперь у вас есть карта</h2>
+    <p>Надеюсь, теперь стало понятно, откуда этот разрыв между тем, что знаем, и тем, что делаем. Между тем, что хотим, и тем, что получается. Он не про силу воли или недостаток информации. А про то, что изменение — сложный процесс, на который влияет очень много всего. Среда, в которой мы живём. Уровень стресса и ресурса. Поддержка или её отсутствие. Момент жизни, где мы сейчас.</p>
+    <p>Но, главное, нам нужны навыки, которые будут работать на изменение «изнутри». Способность видеть себя честно. Выдерживать дискомфорт, не убегая. Учиться из опыта, а не ломаться об него. Находить смысл, который держит, когда мотивация уходит. И другие.</p>
+    <p>Мета-навыки не делают путь лёгким. Не убирают препятствия снаружи. Но они меняют то, как мы проходим через них.</p>
+    <div class="pull">
+      <p>И здесь работает петля. Мета-навыки помогают меняться. А сами изменения — один из самых классных способов мета-навыки развить.</p>
+    </div>
+    <p>Хорошая новость: не нужно иметь все навыки прямо сейчас. Нужно знать, где мы находимся и развивать именно то, что нужно здесь и сейчас.</p>
+    <p style="margin-top:32px;font-family:'Playfair Display',Georgia,serif;font-size:22px;color:var(--ink);font-weight:400">Теперь у вас есть карта.</p>
+  </div>
+</section>
+
+<!-- PROMO BLOCK -->
+<section style="background:#EDE8F5;padding:64px 40px">
+  <div style="max-width:760px;margin:0 auto">
+    <div style="font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#8B7EC8;margin-bottom:16px">Humanity Lab · 8 сентября</div>
+    <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(22px,3vw,32px);font-weight:400;color:#1C1C1C;margin-bottom:16px;line-height:1.3">Начните развивать мета-навыки<br>в Лаборатории философского интеллекта</h2>
+    <p style="font-size:16px;color:#5A5A5A;margin-bottom:16px;max-width:580px;line-height:1.65">Лаборатория — это пространство, где участники сосредоточены на практическом опыте: исследуют, экспериментируют и учатся применять теоретические знания в собственной жизни.</p>
+    <p style="font-size:16px;color:#5A5A5A;margin-bottom:32px;max-width:580px;line-height:1.65">Клуб на 3 месяца, где мы создаём безопасную и развивающую среду для практики и диалога с близкими по ценностям людьми, стремящимися к развитию и управлению своей жизнью. Стартует 8 сентября.</p>
+
+    <a href="https://4humanity.community/philosophical_intellect" style="display:inline-block;background:#8B7EC8;color:white;font-size:14px;font-weight:600;padding:14px 28px;border-radius:100px;text-decoration:none;letter-spacing:0.03em">Узнать подробнее →</a>
+  </div>
+</section>
+
+<!-- ABOUT BLOCK -->
+<section style="background:#FAFAF8;padding:64px 40px;border-top:1px solid #E2DDD8">
+  <div style="max-width:760px;margin:0 auto">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start">
+      <div style="display:flex;flex-direction:column;height:100%">
+        <div style="font-size:15px;font-weight:700;color:#1C1C1C;margin-bottom:14px;letter-spacing:0.01em">Humanity Lab</div>
+        <p style="font-size:14px;color:#5A5A5A;line-height:1.65;margin-bottom:12px">Лаборатория для системного развития навыков будущего, сообщество единомышленников и поддерживающая среда для внедрения привычек в жизнь.</p>
+        <p style="font-size:14px;color:#5A5A5A;line-height:1.65;margin-bottom:auto">Наша задача — создать среду для раскрытия потенциала и познакомить с инструментами, которые позволят легче найти свою формулу качественной жизни, стать более зрелыми, устойчивыми и счастливыми.</p>
+        <a href="https://4humanity.community/philosophical_intellect" style="display:inline-block;margin-top:24px;font-size:14px;font-weight:600;color:#8B7EC8;text-decoration:none">Узнать подробнее →</a>
+      </div>
+      <div style="display:flex;flex-direction:column;height:100%">
+        <div style="font-size:15px;font-weight:700;color:#1C1C1C;margin-bottom:14px;letter-spacing:0.01em">Хэлс-коуч Катя Стрельникова</div>
+        <p style="font-size:14px;color:#5A5A5A;line-height:1.65;margin-bottom:12px">Сертифицированный хэлс-коуч с 4,5+ годами практики. Ветеран выгорания, РПП и дискотечного угара. За последние 6 лет изменила жизнь на 180°: профессию, образ жизни и страну — не один раз.</p>
+        <p style="font-size:14px;color:#5A5A5A;line-height:1.65;margin-bottom:auto">Работает с клиентами над изменениями в сфере здоровья, энергии и устойчивых привычек. Ведёт Телеграм-канал «На Балансе» и страничку в запрещённой сети об устойчивых изменениях и велнесе без хайпа.</p>
+        <a href="https://t.me/healthcoach_katya_bot" style="display:inline-block;margin-top:24px;font-size:14px;font-weight:600;color:#C4906E;text-decoration:none">Узнать подробнее →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <p><a href="https://4humanity.community/philosophical_intellect" style="color:rgba(255,255,255,0.7);text-decoration:none;font-weight:600">Humanity Lab</a> × <a href="https://t.me/healthcoach_katya_bot" style="color:rgba(255,255,255,0.7);text-decoration:none;font-weight:600">Хэлс-коуч Катя Стрельникова</a></p>
+</footer>
+
+</body>
+</html>
